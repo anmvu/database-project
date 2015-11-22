@@ -1,0 +1,18 @@
+#login{
+	-webkit-appearance: button;
+	-moz-appearance: button;
+	appearance: button;
+	text-decoration: none;
+	color: black;
+	display: inline-block;
+	/*margin: 10%;*/
+	float: right;
+	/*position: relative;*/
+	top:0;
+
+}
+
+#form{
+	display: inline
+
+
