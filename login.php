@@ -5,6 +5,7 @@
 <?php
 
 	include "connect.php";
+	session_start();
 
 	if (isset($_SESSION['username'])){
 		echo "You are already logged in!\n";
@@ -25,12 +26,17 @@
 					$_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
 					echo "Login successful\n";
 					echo "Redirecting in 5 seconds..";
+					echo "<br/>";
+					echo "Or press <a href='homepage.php'>here</a> to continue";
 					header("refresh: 5; homepage.php");
 				}
 
 				else{
 					sleep(1);
 					echo "Username and password combination is incorrect";
+					echo "<br/>";
+					echo "Redirecting in 5 seconds...";
+					echo "Or press <a href='login.php'>here</a> to continue";
 					header("refresh:5,login.php");
 				}
 
