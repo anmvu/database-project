@@ -23,6 +23,7 @@
 				if($query->fetch()){
 					$_SESSION['username'] = $username;
 					$_SESSION['password'] = $password;
+					$
 					$_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
 					echo "Login successful\n";
 					echo "Redirecting in 5 seconds..";
