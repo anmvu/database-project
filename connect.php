@@ -1,3 +1,6 @@
+<!-- Robert Lagomarsino
+An Vu
+Project 3A Connecting to the Database -->
 <?php
 	$link = new mysqli("localhost","root","","meetup");
 	if ($link->connect_errno) {

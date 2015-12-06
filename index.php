@@ -1,14 +1,23 @@
 <!DOCTYPE html>
+<!-- Robert Lagomarsino
+An Vu
+Project 3A Interests Page -->
 <html>
 <title>Home</title>
 <link href="css/index.css" rel="stylesheet">
 <body>
-	Interests
+	<?php
+		include "connect.php";
+		session_start();
+		if (!isset($_SESSION['username'])){
+			echo "<a id='login' href='login.php'>Login</a>";
+		}
+	?>
+	<h2>Interests</h2>
 	<form  id = 'form' action='<?php echo $_SERVER['PHP_SELF'];?>' method ='post' name ='interest_form'>
 		<select name='interests'>
 			<option value='all'>All</option>
 			<?php
-				include "connect.php";
 				if ($query = $link->prepare('select * from interest')){
 					$query->execute();
 					$query->bind_result($interest);
@@ -21,7 +30,6 @@
 		</select>
 		<input type='submit' value='Filter'>
 	</form>
-	<a id='login' href='login.php'>Login</a>
 	<table style='text-align:center;'>
 		<tr>
 			<td>Event ID</td>
@@ -53,10 +61,12 @@
 				echo "<td>".$row[5]."</td>";
 				echo "<td>".$row[6]."</td>";
 				echo "<td>".$row[7]."</td>";
+				if (isset($_SESSION['username'])){
+					echo "<td><a id='login'>RSVP</a></td>";
+				}
 				echo "</tr>";
 			}
 			$query->close();
-			$link->close();
 		}
 
 	?>
