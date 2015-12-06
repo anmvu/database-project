@@ -1,0 +1,39 @@
+#login{
+	width:50%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 25%;
+	background-color: purple;
+	border-radius: 10px;
+	text-align: center;
+	color: white;
+}
+
+.label{
+	width: 20%;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	/*padding-right: 5%;*/
+}
+
+.input{
+	width: 70%;
+}
+
+#submit{
+	display: inline-block;
+	position: relative;
+	margin: 10%;
+}
+
+#back{
+	-webkit-appearance: button;
+	-moz-appearance: button;
+	appearance: button;
+	text-decoration: none;
+	color: black;
+	display: inline-block;
+	margin: 10%;
+	/*font-size: 12px;*/
+}
