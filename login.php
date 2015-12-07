@@ -12,7 +12,7 @@ Project 3A Login Page -->
 
 	if (isset($_SESSION['username'])){
 		echo "You are already logged in!\n";
-		header("refresh:3;homepage.php");
+		header("refresh:3;homepage.php#home");
 	}
 
 	else{
@@ -26,9 +26,9 @@ Project 3A Login Page -->
 				if($query->fetch()){
 					$_SESSION['username'] = $username;
 					$_SESSION['password'] = $password;
-					$
 					$_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
-					echo "Login successful\n";
+					echo "Login successful";
+					echo "<br/>";
 					echo "Redirecting in 5 seconds..";
 					echo "<br/>";
 					echo "Or press <a href='homepage.php'>here</a> to continue";

@@ -10,7 +10,18 @@ Project 3A Interests Page -->
 		include "connect.php";
 		session_start();
 		if (!isset($_SESSION['username'])){
+			echo "<p id ='nav'>";
 			echo "<a id='login' href='login.php'>Login</a>";
+			echo "</p>";
+		}
+		if (isset($_SESSION['username'])){
+			echo "<p id ='nav'>
+				<a href='homepage.php#home' >Home</a>
+				<a href='homepage.php#events'>My Events</a>
+				<a href='homepage.php#groups'>Groups</a>
+				<a href='index.php'> All Events </a>
+				<a href='logout.php'>Logout</a>
+			</p>";
 		}
 	?>
 	<h2>Interests</h2>

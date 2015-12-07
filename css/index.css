@@ -17,3 +17,18 @@
 }
 
 
+#nav{
+	background-color: purple;
+	padding: 10px;
+}
+
+#nav a{
+	text-decoration: none;
+	color: white;
+	/*border: solid;*/
+	margin: 10px;
+}
+
+#nav a:hover{
+	color: red;
+}
