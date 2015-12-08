@@ -153,7 +153,7 @@ Project 3A Interests Page -->
 								if ($delete = $link->query('Select username from groupuser where authorized = 1 and group_id in (Select group_id from an_event where event_id ='.$row[0].')')){
 									if ($delrow = $delete->fetch_row()){
 										if ($delrow[0] == $_SESSION['username']){
-											echo "<td><form action='modify.php' method='post'><input type='hidden' value='".$row[0]."' name='event'><input type='submit' value='modify'><input type='submit' alt='delete'></form></td>";
+											echo "<td><form action='modify.php' method='post'><input type='hidden' value='".$row[0]."' name='event'><input type='submit' name='modify' value='Modify'><input type='submit' name='delete' value='Delete'></form></td>";
 										}
 									}
 								}
@@ -181,10 +181,10 @@ Project 3A Interests Page -->
 							echo "<textarea rows='4' cols='50' name='descr' form='create_event' style='margin-top:3px;'></textarea>";
 							echo "<br>";
 							echo "<div style='display:inline-block; width:150px;'><label style='display:block;float:left;'>Start</label></div>";
-							echo "<input type='text' name='start'>";
+							echo "<input type='text' name='start' placeholder='2015-12-31 09:30 AM'>";
 							echo "<br>";
 							echo "<div style='display:inline-block; width:150px;'><label style='display:block;float:left;'>End</label></div>";
-							echo "<input type='text' name='end'>";
+							echo "<input type='text' name='end' placeholder='2015-12-31 09:30 AM'>";
 							echo "<br>";
 							echo "<div style='display:inline-block; width:150px;'><label style='display:block;float:left;'>Location Name</label></div>";
 							echo "<input type='text' name='lname'>";
