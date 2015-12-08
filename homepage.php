@@ -18,12 +18,13 @@ Project 3A Interests Page -->
 		<p id ='nav'>
 			<a href='#home'>Home</a>
 			<a href='index.php' > All Events </a>
-			<a href='#events' >My Events</a>
+			<a href='#events'>My Events</a>
 			<a href='#groups' >Groups</a>
 			<a href='logout.php'>Logout</a>
 		</p>
 		<div class='items'>
-			<div id='home'>
+			<div id='home' class=
+			'item'>
 				<h2>My Upcoming Events</h2>
 				<table style='text-align:center;'>
 					<tr>
@@ -59,7 +60,7 @@ Project 3A Interests Page -->
 				?>
 				</table>
 			</div>
-			<div id='events'>
+			<div id='events' class='item'>
 				<h2> Events </h2>
 				<form  id = 'form' action='<?php echo $_SERVER['PHP_SELF'];?>' method ='post' name ='interest_form'>
 					<select name='interests'>
@@ -109,7 +110,7 @@ Project 3A Interests Page -->
 							echo "<td>".$row[6]."</td>";
 							echo "<td>".$row[7]."</td>";
 							if (isset($_SESSION['username'])){
-								echo "<td><a id='login'>RSVP</a></td>";
+								echo "<td><form action='rsvp.php' method='POST'> <input type='hidden' value='".$row[0]."'name = 'event'><input type='submit' value='RSVP'</form></td>";
 							}
 							echo "</tr>";
 						}
@@ -134,7 +135,7 @@ Project 3A Interests Page -->
 				?>
 				</table>
 			</div>
-			<div id='groups'>
+			<div id='groups'class='item'>
 				<p>
 					<a id='button' >Create group</a>
 				</p>
@@ -176,54 +177,45 @@ Project 3A Interests Page -->
 				?>
 				</table>
 				<h2>Grant Ability to Create Events</h2>
-				<table style='text-align:center;'>
-					<tr>
-						<td>Group ID</td>
-						<td>Group Name</td>
-						<td>Description</td>
-						<td></td>
-					</tr>
-				<?php
-					$choice = "SELECT group_id, group_name, description from a_group where username='".$_SESSION['username']."'";
-					if($query = $link->query($choice)){
-						while($row = $query->fetch_row()){
-							echo "<tr>";
-							echo "<td>".$row[0]."</td>";
-							echo "<td>".$row[1]."</td>";
-							echo "<td>".$row[2]."</td>";
-							echo "<td>";
-							if (isset($_POST['authorize'])){
-								$user = $_POST['authorize'];
-								$check = "Select * from groupuser where username = '".$user."' and group_id =".$row[0]."'";
-								if($check_result = $link->query($check)){
-									echo 'yes';
-									$result_row = $check_result->fetch_row();
-									if ($result->num_rows == 0){
-										echo "User,".$user." , is not in this group";
-									}
-									else if ($result_row[2]==1){
-										echo "User,".$user." , is has already been authorized";
-									}
-									else{
-										$update = "Update groupuser SET authorized = 1 where username = '".$user."' and group_id =".$row[0]."'";
-										echo "Success!";
-									}
-								}
+				<div>
+					<table style='text-align:center; display:inline-block; float:left;'>
+						<tr>
+							<td>Group ID</td>
+							<td>Group Name</td>
+							<td>Description</td>
+						</tr>
+					<?php
+						$choice = "SELECT group_id, group_name, description from a_group where username='".$_SESSION['username']."'";
+						if($query = $link->query($choice)){
+							while($row = $query->fetch_row()){
+								echo "<tr>";
+								echo "<td>".$row[0]."</td>";
+								echo "<td>".$row[1]."</td>";
+								echo "<td>".$row[2]."</td>";
+								echo "</tr>";
 							}
-							echo "<a href='javascript:;' id='button' onclick='toggle_visibility(\"addUser".$row[0]."\")'>Authorize another user</a>";
-							$form = "<form id ='addUser".$row[0]."' action='homepage.php#groups' method='POST' style='display:none;'>";
-							echo $form;
-							echo "<input class='input' type='text' name='authorize'>";
-							echo "<input id= 'submit' type='submit' value='Submit'>";
-							echo "</form>";
-							echo "</td>";
-							echo "</tr>";
+							
 						}
-						$query->close();
-					}
 
-				?>
-				</table>
+					?>
+					</table>
+					<div class='authorize'>
+						<p style='margin:4px;'> Authorize User </p>
+					<?php
+						$choice = "SELECT group_id, group_name, description from a_group where username='".$_SESSION['username']."'";
+						if($query = $link->query($choice)){
+							while($row = $query->fetch_row()){
+								echo '<form action="authorizeuser.php?.'.$row[0].'"method="post">';
+								echo '<input type="text" name="authorize" style="display:inline-block">';
+								echo '<input type="submit" value="Submit" style="display:inline-block">';
+								echo '</form>';
+							}
+							$query->close();
+						}
+					?>
+					</div>
+				</div>
+			</div>
 		</div>
 		<?php
 			$link->close();

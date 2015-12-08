@@ -36,11 +36,11 @@
 	/*font-size: 12px;*/
 }
 
-div.items div{
+div.item{
 	display: none;
 }
 
-div.items div:target{
+div.item:target{
 	display: block;
 }
 
@@ -75,4 +75,8 @@ form{
 	float: right;
 	/*position: relative;*/
 	top:0;
+}
+
+.authorize{
+	display: inline-block;
 }

@@ -31,8 +31,8 @@ Project 3A Login Page -->
 					echo "<br/>";
 					echo "Redirecting in 5 seconds..";
 					echo "<br/>";
-					echo "Or press <a href='homepage.php'>here</a> to continue";
-					header("refresh: 5; homepage.php");
+					echo "Or press <a href='homepage.php#home'>here</a> to continue";
+					header("refresh: 5; homepage.php#home");
 				}
 
 				else{

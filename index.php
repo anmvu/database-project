@@ -11,7 +11,7 @@ Project 3A Interests Page -->
 		session_start();
 		if (!isset($_SESSION['username'])){
 			echo "<p id ='nav'>";
-			echo "<a id='login' href='login.php'>Login</a>";
+			echo "<a href='login.php'>Login</a>";
 			echo "</p>";
 		}
 		if (isset($_SESSION['username'])){
@@ -51,6 +51,7 @@ Project 3A Interests Page -->
 			<td>Group ID</td>
 			<td>Location</td>
 			<td>Zip Code</td>
+			<td></td>
 		</tr>
 	<?php
 		$choice = 'SELECT * from an_event';
@@ -73,7 +74,19 @@ Project 3A Interests Page -->
 				echo "<td>".$row[6]."</td>";
 				echo "<td>".$row[7]."</td>";
 				if (isset($_SESSION['username'])){
-					echo "<td><a id='login'>RSVP</a></td>";
+					if($rsvp_query = $link->prepare('Select rsvp from eventuser where username= ? and event_id = ?')){
+						$rsvp_query->bind_param('si',$_SESSION['username'],$row[0]);
+						$rsvp_query->execute();
+						$rsvp_query->bind_result($rsvp);
+						if($rsvp_query->fetch()){
+							echo "<td>";
+							echo ($rsvp == 0) ? "<a id='login'>RSVP</a>" : "Attending &#10004";
+							echo "</td>";
+						}
+						else{
+							echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='Submit'>RSVP</form></td>";
+						}
+					}
 				}
 				echo "</tr>";
 			}
