@@ -20,6 +20,7 @@ Project 3A Interests Page -->
 			<a href='index.php' > All Events </a>
 			<a href='#events'>My Events</a>
 			<a href='#groups' >Groups</a>
+			<a href='updateuser.php'> My Account</a>
 			<a href='logout.php'>Logout</a>
 		</p>
 		<div class='items'>
@@ -40,27 +41,36 @@ Project 3A Interests Page -->
 				<?php
 					include "connect.php";
 					session_start();
-					$choice = "SELECT * from an_event where event_id in (select event_id from eventuser where username='".$_SESSION['username']."')";
+					$range = [];
+					for ($x=0; $x<4; $x++){
+						$day = time()+($x*24*60*60);
+						$nextday = date('Y-m-d',$day);
+						array_push($range,$nextday);
+					}
+					$choice = "SELECT * from an_event where event_id in (select event_id from eventuser where username='".$_SESSION['username']."') order by start_time asc";
 					if($query = $link->query($choice)){
 						while($row = $query->fetch_row()){
-							echo "<tr>";
-							echo "<td>".$row[0]."</td>";
-							echo "<td>".$row[1]."</td>";
-							echo "<td>".$row[2]."</td>";
-							echo "<td>".$row[3]."</td>";
-							echo "<td>".$row[4]."</td>";
-							echo "<td>".$row[6]."</td>";
-							echo "<td>".$row[7]."</td>";
-							if($group_query = $link->prepare('Select group_name from a_group where group_id= ?')){
-								$group_query->bind_param('s',$row[5]);
-								$group_query->execute();
-								$group_query->bind_result($group);
-								if($group_query->fetch()){
-									echo "<td>".$group."</td>";
+							$event_start = substr($row[3],0,10);
+							if (in_array($event_start,$range)){
+								echo "<tr>";
+								echo "<td>".$row[0]."</td>";
+								echo "<td>".$row[1]."</td>";
+								echo "<td>".$row[2]."</td>";
+								echo "<td>".$row[3]."</td>";
+								echo "<td>".$row[4]."</td>";
+								echo "<td>".$row[6]."</td>";
+								echo "<td>".$row[7]."</td>";
+								if($group_query = $link->prepare('Select group_name from a_group where group_id= ?')){
+									$group_query->bind_param('s',$row[5]);
+									$group_query->execute();
+									$group_query->bind_result($group);
+									if($group_query->fetch()){
+										echo "<td>".$group."</td>";
+									}
+									$group_query->close();
 								}
-								$group_query->close();
+								echo "</tr>";
 							}
-							echo "</tr>";
 						}
 						$query->close();
 					}

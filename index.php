@@ -21,6 +21,7 @@ Project 3A Interests Page -->
 				<a href='index.php'> All Events </a>
 				<a href='homepage.php#events'>My Events</a>
 				<a href='homepage.php#groups'>Groups</a>
+				<a href='updateuser.php'>My Account</a>
 				<a href='logout.php'>Logout</a>
 			</p>";
 		}
@@ -55,11 +56,11 @@ Project 3A Interests Page -->
 			<td></td>
 		</tr>
 	<?php
-		$choice = 'SELECT * from an_event';
+		$choice = 'SELECT * from an_event order by start_time asc';
 		if(isset($_POST['interests'])){
 			$interest_choice =  $_POST['interests'];
 			if ($interest_choice != 'all'){
-				$choice = "SELECT * from an_event where group_id in (select group_id from groupinterest where interest_name='".$interest_choice."' order by start_time asc)";
+				$choice = "SELECT * from an_event where group_id in (select group_id from groupinterest where interest_name='".$interest_choice."') order by start_time asc";
 			}
 		}
 		// echo $choice;
