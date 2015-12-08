@@ -143,7 +143,7 @@ Project 3A Interests Page -->
 								if ($delete = $link->query('Select username from groupuser where authorized = 1 and group_id in (Select group_id from an_event where event_id ='.$row[0].')')){
 									if ($delrow = $delete->fetch_row()){
 										if ($delrow[0] == $_SESSION['username']){
-											echo "<td><form action='modify.php' method='post'><input type='hidden' value='".$row[0]."' name='event'><input type='submit' value='Modify'><input type='submit' value='Delete'></form></td>";
+											echo "<td><form action='modify.php' method='post'><input type='hidden' value='".$row[0]."' name='event'><input type='submit' value='modify'><input type='submit' alt='delete'></form></td>";
 										}
 									}
 								}
