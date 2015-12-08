@@ -12,14 +12,15 @@ Project 3A Interests Page -->
 		if (!isset($_SESSION['username'])){
 			echo "<p id ='nav'>";
 			echo "<a href='login.php'>Login</a>";
+			echo "<a href='signup.php'>Sign Up </a>";
 			echo "</p>";
 		}
 		if (isset($_SESSION['username'])){
 			echo "<p id ='nav'>
 				<a href='homepage.php#home' >Home</a>
+				<a href='index.php'> All Events </a>
 				<a href='homepage.php#events'>My Events</a>
 				<a href='homepage.php#groups'>Groups</a>
-				<a href='index.php'> All Events </a>
 				<a href='logout.php'>Logout</a>
 			</p>";
 		}
@@ -58,7 +59,7 @@ Project 3A Interests Page -->
 		if(isset($_POST['interests'])){
 			$interest_choice =  $_POST['interests'];
 			if ($interest_choice != 'all'){
-				$choice = "SELECT * from an_event where group_id in (select group_id from groupinterest where interest_name='".$interest_choice."')";
+				$choice = "SELECT * from an_event where group_id in (select group_id from groupinterest where interest_name='".$interest_choice."' order by start_time asc)";
 			}
 		}
 		// echo $choice;
