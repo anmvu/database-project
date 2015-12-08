@@ -75,17 +75,20 @@ Project 3A Interests Page -->
 				echo "<td>".$row[7]."</td>";
 				if (isset($_SESSION['username'])){
 					if($rsvp_query = $link->prepare('Select rsvp from eventuser where username= ? and event_id = ?')){
+
 						$rsvp_query->bind_param('si',$_SESSION['username'],$row[0]);
 						$rsvp_query->execute();
 						$rsvp_query->bind_result($rsvp);
+						
 						if($rsvp_query->fetch()){
 							echo "<td>";
 							echo ($rsvp == 0) ? "<a id='login'>RSVP</a>" : "Attending &#10004";
 							echo "</td>";
 						}
 						else{
-							echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='Submit'>RSVP</form></td>";
+							echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form></td>";
 						}
+						$rsvp_query->close();
 					}
 				}
 				echo "</tr>";

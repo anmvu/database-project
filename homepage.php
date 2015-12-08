@@ -62,7 +62,7 @@ Project 3A Interests Page -->
 			</div>
 			<div id='events' class='item'>
 				<h2> Events </h2>
-				<form  id = 'form' action='<?php echo $_SERVER['PHP_SELF'];?>' method ='post' name ='interest_form'>
+				<form  id = 'select_interest' action="homepage.php#events" method ='post' name ='interest_form'>
 					<select name='interests'>
 						<option value='all'>All</option>
 						<?php
@@ -89,34 +89,46 @@ Project 3A Interests Page -->
 						<td>Location</td>
 						<td>Zip Code</td>
 					</tr>
-				<?php
-					$choice = 'SELECT * from an_event';
-					if(isset($_POST['interests'])){
-						$interest_choice =  $_POST['interests'];
-						if ($interest_choice != 'all'){
-							$choice = "SELECT * from an_event where group_id in (select group_id from groupinterest where interest_name='".$interest_choice."')";
-						}
-					}
-					// echo $choice;
-					if($query = $link->query($choice)){
-						while($row = $query->fetch_row()){
-							echo "<tr>";
-							echo "<td>".$row[0]."</td>";
-							echo "<td>".$row[1]."</td>";
-							echo "<td>".$row[2]."</td>";
-							echo "<td>".$row[3]."</td>";
-							echo "<td>".$row[4]."</td>";
-							echo "<td>".$row[5]."</td>";
-							echo "<td>".$row[6]."</td>";
-							echo "<td>".$row[7]."</td>";
-							if (isset($_SESSION['username'])){
-								echo "<td><form action='rsvp.php' method='POST'> <input type='hidden' value='".$row[0]."'name = 'event'><input type='submit' value='RSVP'</form></td>";
+					<?php
+						$choice = 'SELECT * from an_event';
+						if(isset($_POST['interests'])){
+							$interest_choice =  $_POST['interests'];
+							if ($interest_choice != 'all'){
+								$choice = "SELECT * from an_event where group_id in (select group_id from groupinterest where interest_name='".$interest_choice."')";
 							}
-							echo "</tr>";
 						}
-						$query->close();
-					}
-				?>
+						// echo $choice;
+						if($query = $link->query($choice)){
+							while($row = $query->fetch_row()){
+								echo "<tr>";
+								echo "<td>".$row[0]."</td>";
+								echo "<td>".$row[1]."</td>";
+								echo "<td>".$row[2]."</td>";
+								echo "<td>".$row[3]."</td>";
+								echo "<td>".$row[4]."</td>";
+								echo "<td>".$row[5]."</td>";
+								echo "<td>".$row[6]."</td>";
+								echo "<td>".$row[7]."</td>";
+								if($rsvp_query = $link->prepare('Select rsvp from eventuser where username= ? and event_id = ?')){
+									$rsvp_query->bind_param('si',$_SESSION['username'],$row[0]);
+									$rsvp_query->execute();
+									$rsvp_query->bind_result($rsvp);
+										
+									if($rsvp_query->fetch()){
+										echo "<td>";
+										echo ($rsvp == 0) ? "<a id='login'>RSVP</a>" : "Attending &#10004";
+										echo "</td>";
+									}
+									else{
+										echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form></td>";
+									}
+									$rsvp_query->close();
+								}
+								echo "</tr>";
+							}
+							$query->close();
+						}
+					?>
 				</table>
 				<h2>Create an Event</h2>
 				<?php
@@ -124,9 +136,33 @@ Project 3A Interests Page -->
 					if($query = $link->query($choice)){
 						while($row = $query->fetch_row()){
 							echo "<li><h3>".$row[0]."</h3>";
-							echo "<ul>";
-							echo "<form>";
-							echo "</ul>";
+							echo "<div class='event_form'>";
+							echo "<form action='createevent.php' method ='post' name ='create_event'>";
+							echo "<div style='display:inline-block; width:150px;'><label style='display:block;float:left;'>Event ID</label></div>";
+							echo "<input type='text' name='e_id'>";
+							echo "<br>";
+							echo "<div style='display:inline-block; width:150px;'><label style='display:block;float:left;'>Event Title</label></div>";
+							echo "<input type='text' name='title'>";
+							echo "<br>";
+							echo "<div style='display:inline-block; width:150px;float:left;'><label>Event Description</label></div>";
+							echo "<textarea rows='4' cols='50' name='descr' form='create_event' style='margin-top:3px;'></textarea>";
+							echo "<br>";
+							echo "<div style='display:inline-block; width:150px;'><label style='display:block;float:left;'>Start</label></div>";
+							echo "<input type='text' name='start'>";
+							echo "<br>";
+							echo "<div style='display:inline-block; width:150px;'><label style='display:block;float:left;'>End</label></div>";
+							echo "<input type='text' name='end'>";
+							echo "<br>";
+							echo "<div style='display:inline-block; width:150px;'><label style='display:block;float:left;'>Location Name</label></div>";
+							echo "<input type='text' name='lname'>";
+							echo "<br>";
+							echo "<div style='display:inline-block; width:150px;'><label style='display:block;float:left;'>Location Zip Code</label></div>";
+							echo "<input type='text' name='zip'>";
+							echo "<br>";
+							echo "<input type='hidden' value='".$row[0]."'>";
+							echo "<input type='submit' value='Create an event for ".$row[0]."'>";
+							echo "</form>";
+							echo "</div>";
 							echo "</li>";
 						}
 						$query->close();
@@ -137,7 +173,21 @@ Project 3A Interests Page -->
 			</div>
 			<div id='groups'class='item'>
 				<p>
-					<a id='button' >Create group</a>
+					<a id='button' href='homepage.php#groups' onclick='toggle_visibility("group-form")'>Create group</a>
+					<div id='group-form'style='display:none'>
+						<form action='creategroup.php' method ='post' name='create-group'>
+							<div style='display:inline-block; width:150px;'><label>Group ID</label></div>
+							<input type='text' name='group_id'>
+							<br>
+							<div style='display:inline-block; width:150px;margin-top:3px;'><label>Group Name</label></div>
+							<input type='text' name='group_name'>
+							<br>
+							<div style='display:inline-block; width:150px;float:left; margin-top:3px;'><label>Description</label></div>
+							<textarea rows='4' cols='21' type='text' name='description' form='create-group' style='margin-top:3px; margin-left:4px;'></textarea>
+							<br>
+							<input type='submit' value='Create Group'>
+						</form>
+					</div>
 				</p>
 				
 				<h2> The Groups You're In </h2>
@@ -168,7 +218,12 @@ Project 3A Interests Page -->
 							echo "<td>".$row[0]."</td>";
 							echo "<td>".$row[1]."</td>";
 							echo "<td>".$row[2]."</td>";
-							echo "<td><a id='button'>Join Group</a></td>";
+							echo "<td>";
+							echo "<form action='joingroup.php' method='post' name='join-group'>";
+							echo "<input type='hidden' value='".$row[0]."'>";
+							echo "<input type='submit' value='Join Group'>";
+							echo "</form>";
+							echo "</td>";
 							echo "</tr>";
 						}
 						$query->close();
@@ -194,7 +249,7 @@ Project 3A Interests Page -->
 								echo "<td>".$row[2]."</td>";
 								echo "</tr>";
 							}
-							
+							$query->close();
 						}
 
 					?>
@@ -205,10 +260,13 @@ Project 3A Interests Page -->
 						$choice = "SELECT group_id, group_name, description from a_group where username='".$_SESSION['username']."'";
 						if($query = $link->query($choice)){
 							while($row = $query->fetch_row()){
-								echo '<form action="authorizeuser.php?.'.$row[0].'"method="post">';
-								echo '<input type="text" name="authorize" style="display:inline-block">';
-								echo '<input type="submit" value="Submit" style="display:inline-block">';
-								echo '</form>';
+								?>
+								<form action="authorizeuser.php" method="post" name="authorize-user">
+								<input type="text" name="authorize" style="display:inline-block">
+								<input type="hidden" value="<?php echo $row[0];?>">
+								<input type="submit" value="Authorize" style="display:inline-block">
+								</form>
+								<?php
 							}
 							$query->close();
 						}

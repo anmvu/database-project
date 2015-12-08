@@ -44,9 +44,6 @@ div.item:target{
 	display: block;
 }
 
-form{
-	display: none;
-}
 
 #nav{
 	background-color: purple;
@@ -79,4 +76,12 @@ form{
 
 .authorize{
 	display: inline-block;
+}
+
+#select_interest{
+	display: inline;
+}
+
+.event_form{
+	margin-left: 5%;
 }
