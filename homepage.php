@@ -15,12 +15,16 @@ Project 3A Interests Page -->
 		}
 	</script>	
 	<body>
+		<?php
+			include "connect.php";
+			session_start();
+		?>
 		<p id ='nav'>
 			<a href='#home'>Home</a>
 			<a href='index.php' > All Events </a>
 			<a href='#events'>My Events</a>
 			<a href='#groups' >Groups</a>
-			<a href='updateuser.php'> My Account</a>
+			<a href='updateuser.php'> My Account(<?php echo $_SESSION['username']?>)</a>
 			<a href='logout.php'>Logout</a>
 		</p>
 		<div class='items'>
@@ -39,8 +43,6 @@ Project 3A Interests Page -->
 						<td>Sponsored By</td>
 					</tr>
 				<?php
-					include "connect.php";
-					session_start();
 					$range = [];
 					for ($x=0; $x<4; $x++){
 						$day = time()+($x*24*60*60);
@@ -142,11 +144,14 @@ Project 3A Interests Page -->
 										
 									if($rsvp_query->fetch()){
 										echo "<td>";
-										echo ($rsvp == 0) ? "<a id='login'>RSVP</a>" : "Attending &#10004";
+										if ($rsvp == 1) echo "Attending &#10004";
+										else if($rsvp == 0) echo "<form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form>";
 										echo "</td>";
 									}
 									else{
-										echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form></td>";
+										echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form>";
+
+										echo "</td>";
 									}
 									$rsvp_query->close();
 								}

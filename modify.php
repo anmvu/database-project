@@ -10,18 +10,20 @@ function goBack() {
 }
 </script>
 <link href='css/homepage.css' rel='stylesheet'>
+<?php
+	include "connect.php";
+	session_start();
+?>
 <p id ='nav'>
 	<a href='#home'>Home</a>
 	<a href='index.php' > All Events </a>
 	<a href='#events'>My Events</a>
 	<a href='#groups' >Groups</a>
-	<a href='updateuser.php'> My Account</a>
+	<a href='updateuser.php'> My Account(<?php echo $_SESSION['username']?>)</a>
 	<a href='logout.php'>Logout</a>
 </p>
 
-	<?php
-		include "connect.php";
-		session_start();
+<?php
 
 		if (isset($_SESSION['username'])){
 			if(isset($_POST['delete'])){
