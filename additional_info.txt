@@ -1,0 +1,26 @@
+Robert Lagomarsino
+An Vu
+Databases
+Final Project
+======================================================================================
+                             ADDITIONAL FEATURES
+======================================================================================
+
+1. Grant Ability to Create Events
+
+2. Join Group
+
+3. View My Groups
+
+4. Signing Up
+
+5. Create a group
+
+6. Modify/Delete an Event
+
+======================================================================================
+                               CONTRIBUTIONS
+======================================================================================
+
+We worked together in the same room for most of the project, so there isn't really
+a clear distinction of who did what.

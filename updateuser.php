@@ -1,3 +1,6 @@
+<!-- Robert Lagomarsino
+An Vu
+Project 3A SignUp Page -->
 <link href='css/homepage.css' rel='stylesheet'>
 <?php
 	include "connect.php";
@@ -20,9 +23,6 @@
 				$old = md5($_POST['current']);
 				$check_pass = sprintf('SELECT * from member where password = "%s" and username= "%s"',$old,$user);
 				if ($query = $link->query($check_pass)){
-				// if($query = $link->prepare('SELECT * from member where password = MD5(?) and username= ?')){
-				// 	$query->bind_param('ss',$old,$user);
-				// 	$query->execute();
 					if(mysqli_num_rows($query) != 0  && $_POST['new'] == $_POST['retype']){
 						if ($check = $link->prepare('UPDATE member SET password = ? WHERE username=?')){
 							$check->bind_param('ss',$pass,$user);

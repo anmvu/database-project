@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Robert Lagomarsino
 An Vu
-Project 3A Interests Page -->
+Project 3A Modify Event Page -->
 <html>
 	<title>Delete Event</title>
 	<script>

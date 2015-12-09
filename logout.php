@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Robert Lagomarsino
 An Vu
-Project 3A Logou Page -->
+Project 3A Logout Page -->
 <html>
 <title>Logout</title>
 

@@ -1,23 +1,36 @@
-List of files:
+Robert Lagomarsino
+An Vu
+Databases
+Final Project
+======================================================================================
+                              FUNCTIONS OF FILES
+======================================================================================
 
-	- All CSS files within the  css folder are just stylesheets
-	- authorizeuser.php
-		- 
-	- connect.php
-		- 
-	- createevent.php
-		-
-	- homepage.php
-		- index.php
-	- index.php
-		- 
-	- joingroup.php
-		- 
-	-login.php
-		-
-	-logout.php
-		-
-	-modify.php
-		-
-	-rsvp.php
-		- signup.php
+> authorizeuser.php
+	Authorizing a user in the database to create events for a group
+> connect.php
+	Connects to the MySQL database for MeetUp
+> createevent.php
+	Adding a new event to the database
+> creategroup.php
+	Adding a new group to the database
+> homepage.php
+	The homepage for a member that is logged in. The "main" of the application.
+	There are 5 different tabs - home, all events (index.php), my events, groups, and my account(updateuser.php)
+	Each tab shows information relevant to the tab title.
+> index.php
+	The default homepage for a user that is not logged in but is also accessible for people that is logged in
+> joingroup.php
+	Adding the signed in member to the selected group
+> login.php
+	Logging the user into the session
+> logout.php
+	Logging the user out of the session
+> modify.php
+	Deleting or modifying an event from the database
+> rsvp.php
+	Adding the event to the user's rsvp'ed events in the database
+> signup.php
+	Adding a new member to the database
+> updateuser.php
+	Changing the information of a user in the database

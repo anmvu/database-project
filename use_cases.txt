@@ -1,0 +1,105 @@
+Robert Lagomarsino
+An Vu
+Databases
+Final Project
+======================================================================================
+                            USE CASES WITH QUERIES
+======================================================================================
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~ Viewing Events By Interests ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: When not logged in, it is the first chart you see. Otherwise, Select "All Events" 
+	Filter with dropdown.
+
+Query: "SELECT * from an_event where group_id in (select group_id from groupinterest 
+	where interest_name='".$interest_choice."') order by start_time asc"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Signing Up ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "Sign Up" on top bar. Fill out form and hit "Submit" button
+
+Query: 'INSERT INTO member(username, password, firstname, lastname, zipcode) 
+	values (?,?,?,?,?)'
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Logging In ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "Login" on top bar. Fill out form and hit "Submit" button
+
+Query: 'Select username,password from member where username= ? and password = ?'
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Logging Out ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "Logout" on the top bar
+
+Query: None
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~ View My Upcoming Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "Home" on the top bar
+
+Query: "SELECT * from an_event where event_id in (select event_id from eventuser 
+	where username='".$_SESSION['username']."') order by start_time asc"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ RSVP For An Event ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "My Events" on the top bar. Select "RSVP" for the corresponding event
+
+Query: 'INSERT INTO eventuser (event_id, username, rsvp, rating) values 
+	(%d,"%s",%d,%d)',$_POST['event'],$username,1,0)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Modify An Event ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "My Events" on the top bar. Select "Modify" or "Delete" for the
+	corresponding event
+
+Query: 'UPDATE an_event SET title=?, description=?, start_time=?, end_time=?, 
+	lname=?, zip=? WHERE event_id=?'
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Create An Event ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "My Events" on the top bar. In the Create an Event Section, fill out the form and
+	press Create an event for [event name].
+
+Query: "INSERT INTO an_event(event_id, title, description, start_time, end_time, 
+	group_id, lname, zip) values (?,?,?,?,?,?,?,?)"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Create A Group ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "Create Group". Fill out the form and Select "Create Group"
+
+Query: "INSERT INTO a_group(group_id,group_name,description,username) 
+	values (?,?,?,?)"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ View My Groups ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "Groups" on the top bar.
+
+Query: "SELECT distinct group_name from a_group join groupuser on 
+	groupuser.group_id = a_group.group_id where groupuser.username = 
+	'".$_SESSION['username']."'"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Join Group ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "Groups" on the top bar. Hit the "Join Group" button for the group 
+	you want to join.
+
+Query: 'INSERT INTO groupuser(group_id, username, authorized) VALUES (%d,"%s",%d)',
+	$_POST['e_id'],$user,0
+
+~~~~~~~~~~~~~~~~~~~~~~~~ Grant Ability to Create Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "Groups" on the top bar. Find the correct group, fill in the user's
+	name, and hit the "Authorize" button.
+
+Query: 'UPDATE groupuser SET authorized=1 WHERE username=? and group_id=?'
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ View Account Info ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use Case: Select "My Account" the top bar.
+
+Queries:
+	- 'UPDATE member SET password = ? WHERE username=?'
+		This is only ran if the password fields are filled
+
+	- 'UPDATE member set firstname = ?, lastname = ?, zipcode = ? where username = ?'
+		Always run.

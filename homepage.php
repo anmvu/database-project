@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Robert Lagomarsino
 An Vu
-Project 3A Interests Page -->
+Project 3A Home Page -->
 <html>
 	<title>Homepage</title>
 	<link href='css/homepage.css' rel='stylesheet'>

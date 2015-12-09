@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Robert Lagomarsino
 An Vu
-Project 3A Interests Page -->
+Project 3A Index Page -->
 <html>
 <title>Home</title>
 <link href="css/index.css" rel="stylesheet">
@@ -65,7 +65,7 @@ Project 3A Interests Page -->
 					else{
 						echo "<option value ='".$x."'>".$x."</option>\n";
 					}
-				}
+				 }
 			?>
 		</select>
 		<select name = 'syear'>
@@ -132,44 +132,92 @@ Project 3A Interests Page -->
 			if ($interest_choice != 'all'){
 				$choice = "SELECT * from an_event where group_id in (select group_id from groupinterest where interest_name='".$interest_choice."') order by start_time asc";
 			}
+
 		}
-		else if (isset($_POST['interests']) && $_POST['smonth'] != 'Month'&& $_POST['sday'] != 'Day'&& $_POST['syear'] != 'Year' && $_POST['emonth'] != 'Month'&& $_POST['eday'] != 'Day'&& $_POST['eyear'] != 'Year'){
-			$interest_choice = $_POST['interests'];
-		}
-		// echo $choice;
+		
 		if($query = $link->query($choice)){
-			while($row = $query->fetch_row()){
-				echo "<tr>";
-				echo "<td>".$row[0]."</td>";
-				echo "<td>".$row[1]."</td>";
-				echo "<td>".$row[2]."</td>";
-				echo "<td>".$row[3]."</td>";
-				echo "<td>".$row[4]."</td>";
-				echo "<td>".$row[5]."</td>";
-				echo "<td>".$row[6]."</td>";
-				echo "<td>".$row[7]."</td>";
-				if (isset($_SESSION['username'])){
-					if($rsvp_query = $link->prepare('Select rsvp from eventuser where username= ? and event_id = ?')){
-
-						$rsvp_query->bind_param('si',$_SESSION['username'],$row[0]);
-						$rsvp_query->execute();
-						$rsvp_query->bind_result($rsvp);
-						
-						if($rsvp_query->fetch()){
-							echo "<td>";
-							if ($rsvp == 1) echo "Attending &#10004";
-							else if($rsvp == 0) echo "<form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form>";
-							echo "</td>";
-						}
-						else{
-							echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form>";
-
-							echo "</td>";
-						}
-						$rsvp_query->close();
-					}
+			if (isset($_POST['smonth']) && isset($_POST['sday']) && isset($_POST['syear']) && isset($_POST['emonth']) && isset($_POST['eday']) && isset($_POST['eyear'])){
+				if ($_POST['smonth'] != 'Month'&& $_POST['sday'] != 'Day'&& $_POST['syear'] != 'Year' && $_POST['emonth'] != 'Month'&& $_POST['eday'] != 'Day'&& $_POST['eyear'] != 'Year'){
+						$start = sprintf("%d-%d-%d",$_POST['syear'],$_POST['smonth'],$_POST['sday']);
+						$start_date = new DateTime($start);
+						$end = sprintf("%d-%d-%d",$_POST['eyear'],$_POST['emonth'],$_POST['eday']);
+						$end_date = new DateTime($end);
+			
 				}
-				echo "</tr>";
+			}
+			while($row = $query->fetch_row()){
+				$event_date = new DateTime(substr($row[3],0,10));
+				if (isset($start_date)&& isset($end_date)){
+					$start_interval = date_diff($start_date,$event_date);
+					$end_interval = date_diff($event_date,$end_date);
+					$range_interval = date_diff($start_date,$end_date);
+					echo '<br>';
+					if ($start_interval->days < $range_interval->days || $end_interval->days < $range_interval->days){
+						echo "<tr>";
+						echo "<td>".$row[0]."</td>";
+						echo "<td>".$row[1]."</td>";
+						echo "<td>".$row[2]."</td>";
+						echo "<td>".$row[3]."</td>";
+						echo "<td>".$row[4]."</td>";
+						echo "<td>".$row[5]."</td>";
+						echo "<td>".$row[6]."</td>";
+						echo "<td>".$row[7]."</td>";
+						if (isset($_SESSION['username'])){
+							if($rsvp_query = $link->prepare('Select rsvp from eventuser where username= ? and event_id = ?')){
+
+								$rsvp_query->bind_param('si',$_SESSION['username'],$row[0]);
+								$rsvp_query->execute();
+								$rsvp_query->bind_result($rsvp);
+								
+								if($rsvp_query->fetch()){
+									echo "<td>";
+									if ($rsvp == 1) echo "Attending &#10004";
+									else if($rsvp == 0) echo "<form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form>";
+									echo "</td>";
+								}
+								else{
+									echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form>";
+								}
+									echo "</td>";
+							}
+							$rsvp_query->close();
+						}
+					}
+					echo "</tr>";
+				}
+				else{
+					echo "<tr>";
+					echo "<td>".$row[0]."</td>";
+					echo "<td>".$row[1]."</td>";
+					echo "<td>".$row[2]."</td>";
+					echo "<td>".$row[3]."</td>";
+					echo "<td>".$row[4]."</td>";
+					echo "<td>".$row[5]."</td>";
+					echo "<td>".$row[6]."</td>";
+					echo "<td>".$row[7]."</td>";
+					if (isset($_SESSION['username'])){
+						if($rsvp_query = $link->prepare('Select rsvp from eventuser where username= ? and event_id = ?')){
+
+							$rsvp_query->bind_param('si',$_SESSION['username'],$row[0]);
+							$rsvp_query->execute();
+							$rsvp_query->bind_result($rsvp);
+							
+							if($rsvp_query->fetch()){
+								echo "<td>";
+								if ($rsvp == 1) echo "Attending &#10004";
+								else if($rsvp == 0) echo "<form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form>";
+								echo "</td>";
+							}
+							else{
+								echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form>";
+
+								echo "</td>";
+							}
+							$rsvp_query->close();
+						}
+					}
+					echo "</tr>";
+				}
 			}
 			$query->close();
 		}
