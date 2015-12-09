@@ -1,3 +1,12 @@
+<link href='css/homepage.css' rel='stylesheet'>
+<p id ='nav'>
+	<a href='homepage.php#home'>Home</a>
+	<a href='index.php' > All Events </a>
+	<a href='homepage.php#events'>My Events</a>
+	<a href='homepage.php#groups' >Groups</a>
+	<a href='updateuser.php'> My Account</a>
+	<a href='logout.php'>Logout</a>
+</p>
 <?php
 	include "connect.php";
 	session_start();
@@ -7,31 +16,32 @@
 			if (isset($_POST['current']) && isset($_POST['new']) && isset($_POST['retype'])){
 				$pass = md5($_POST['new']);
 				$old = md5($_POST['current']);
-				echo $pass;
-				// $check_pass = sprintf('SELECT * from member where password = "%s" and username= "%s"',$old,$user);
-				// if ($query = $link->query($check_pass)){
-				if($query = $link->prepare('SELECT * from member where password = ? and username= ?')){
-					$query->bind_param('ss',$old,$user);
-					$query->execute();
-					print $query->num_rows();
-					if($query->num_rows() != 0  && $_POST['new'] == $_POST['retype']){
-						echo "yes";
+				$check_pass = sprintf('SELECT * from member where password = "%s" and username= "%s"',$old,$user);
+				if ($query = $link->query($check_pass)){
+				// if($query = $link->prepare('SELECT * from member where password = MD5(?) and username= ?')){
+				// 	$query->bind_param('ss',$old,$user);
+				// 	$query->execute();
+					if(mysqli_num_rows($query) != 0  && $_POST['new'] == $_POST['retype']){
 						if ($check = $link->prepare('UPDATE member SET password = ? WHERE username=?')){
 							$check->bind_param('ss',$pass,$user);
 							$check->execute();
-							echo "Update password";
+							echo "Updated password";
+							echo "<br>";
 						}
-						echo 'right password';
 					}
 					
 					$query->close();
 				}
 			}
-			if($query = $link->prepare('UPDATE member set firstname = ?, lastname = ?, zipcode = ? where user = ?')){
+			// $update = 'UPDATE member set firstname = "%s",lastname="%s",zipcode=%d where '
+			$first = ($_POST['first']);
+			$last = ($_POST['last']);
+			$zip = ($_POST['zip']);
+			if($query = $link->prepare('UPDATE member set firstname = ?, lastname = ?, zipcode = ? where username = ?')){
 				$query->bind_param('ssis',$first,$last,$zip,$user);
 				$query->execute();
 				echo "SUCCESS!";
-				header("refresh:2;homepage.php#home");
+				header("refresh:1;updateuser.php");
 				$query->close();
 			}
 		}
