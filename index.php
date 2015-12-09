@@ -21,7 +21,7 @@ Project 3A Interests Page -->
 				<a href='index.php'> All Events </a>
 				<a href='homepage.php#events'>My Events</a>
 				<a href='homepage.php#groups'>Groups</a>
-				<a href='updateuser.php'>My Account</a>
+				<a href='updateuser.php'>My Account(".$_SESSION['username'].")</a>
 				<a href='logout.php'>Logout</a>
 			</p>";
 		}
@@ -38,6 +38,76 @@ Project 3A Interests Page -->
 						echo "<option value='".$interest."'>".$interest."</option>\n";
 					}
 					$query->close();
+				}
+			?>
+		</select>
+		<label>Between: </label>
+		<select name = 'smonth'>
+			<option>Month</option>
+			<?php
+				for ($x = 1; $x < 13; $x++){
+					if ($x < 10){
+						echo "<option value ='0".$x."'>0".$x."</option>\n"; 
+					}
+					else{
+						echo "<option value ='".$x."'>".$x."</option>\n";
+					}
+				}
+			?>
+		</select>
+		<select name = 'sday'>
+			<option>Day</option>
+			<?php
+				for ($x = 1; $x < 32; $x++){
+					if ($x < 10){
+						echo "<option value ='0".$x."'>0".$x."</option>\n"; 
+					}
+					else{
+						echo "<option value ='".$x."'>".$x."</option>\n";
+					}
+				}
+			?>
+		</select>
+		<select name = 'syear'>
+			<option>Year</option>
+			<?php
+				for ($x = 2015; $x < 2020; $x++){
+					echo "<option value ='".$x."'>".$x."</option>\n";
+				}
+			?>
+		</select>
+		<label> and </label>
+		<select name = 'emonth'>
+			<option>Month</option>
+			<?php
+				for ($x = 1; $x < 13; $x++){
+					if ($x < 10){
+						printf("<option value ='0%d'>0%d</option>\n",$x,$x); 
+					}
+					else{
+						echo "<option value ='".$x."'>".$x."</option>\n";
+					}
+				}
+			?>
+		</select>
+		<select name = 'eday'>
+			<option>Day</option>
+			<?php
+				for ($x = 1; $x < 32; $x++){
+					if ($x < 10){
+						echo "<option value ='0".$x."'>0".$x."</option>\n"; 
+					}
+					else{
+						echo "<option value ='".$x."'>".$x."</option>\n";
+					}
+				}
+			?>
+		</select>
+		<select name = 'eyear'>
+			<option>Year</option>
+			<?php
+				for ($x = 2015; $x < 2020; $x++){
+					echo "<option value ='".$x."'>".$x."</option>\n";
 				}
 			?>
 		</select>
@@ -63,6 +133,9 @@ Project 3A Interests Page -->
 				$choice = "SELECT * from an_event where group_id in (select group_id from groupinterest where interest_name='".$interest_choice."') order by start_time asc";
 			}
 		}
+		else if (isset($_POST['interests']) && $_POST['smonth'] != 'Month'&& $_POST['sday'] != 'Day'&& $_POST['syear'] != 'Year' && $_POST['emonth'] != 'Month'&& $_POST['eday'] != 'Day'&& $_POST['eyear'] != 'Year'){
+			$interest_choice = $_POST['interests'];
+		}
 		// echo $choice;
 		if($query = $link->query($choice)){
 			while($row = $query->fetch_row()){
@@ -84,11 +157,14 @@ Project 3A Interests Page -->
 						
 						if($rsvp_query->fetch()){
 							echo "<td>";
-							echo ($rsvp == 0) ? "<a id='login'>RSVP</a>" : "Attending &#10004";
+							if ($rsvp == 1) echo "Attending &#10004";
+							else if($rsvp == 0) echo "<form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form>";
 							echo "</td>";
 						}
 						else{
-							echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form></td>";
+							echo "<td><form action='rsvp.php' method='POST' style='float:right;'> <input type='hidden' value='".$row[0]."'name='event'><input type='submit' value='RSVP'></form>";
+
+							echo "</td>";
 						}
 						$rsvp_query->close();
 					}

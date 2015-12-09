@@ -1,0 +1,23 @@
+List of files:
+
+	- All CSS files within the  css folder are just stylesheets
+	- authorizeuser.php
+		- 
+	- connect.php
+		- 
+	- createevent.php
+		-
+	- homepage.php
+		- index.php
+	- index.php
+		- 
+	- joingroup.php
+		- 
+	-login.php
+		-
+	-logout.php
+		-
+	-modify.php
+		-
+	-rsvp.php
+		- signup.php
